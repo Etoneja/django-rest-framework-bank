@@ -141,12 +141,10 @@ class TransactionViewSet(viewsets.GenericViewSet,
             account = Account.objects.filter(
                 user=self.request.user).get(pk=self.request.data['account'])
         except Exception as e:
-            print(e)
             content = {'error': 'No such account'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save(account=account)
-
         try:
             Transaction.make_transaction(**serializer.validated_data)
         except ValueError:
